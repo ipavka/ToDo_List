@@ -9,7 +9,7 @@ const instance = axios.create({
         'API-KEY': apiConfig.NETWORK_KEY as string
     },
 })
-console.log(apiConfig.NETWORK_KEY)
+
 const placeholderInst = axios.create({
     withCredentials: true,
     baseURL: "https://jsonplaceholder.typicode.com/",
