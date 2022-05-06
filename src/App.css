@@ -1,11 +1,27 @@
-.App {
+.mainBlock {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+.addInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
 }
 
-.toDoListMainBlock {
+.todoListMainBlock {
+    display: flex;
+    max-width: 1024px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.todoListBlock {
     width: 320px;
+    min-height: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,6 +29,7 @@
     border-radius: 10px;
     box-shadow: 5px 20px 70px rgba(14, 19, 232, 0.2);
     margin-bottom: 20px;
+    margin-right: 10px;
 }
 .taskBlock {
     width: 70%;

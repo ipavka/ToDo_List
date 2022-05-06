@@ -1,14 +1,19 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks-reducer";
+import {
+    addTaskTC,
+    _changeTaskStatusTC,
+    fetchTasksTC,
+    removeTaskTC,
+    updateTaskTitleTC, changeTaskStatusTC
+} from "../state/tasks-reducer";
 import {
     changeTodolistFilterAC,
-    changeTodoListTitleAC,
-    removeTodoListAC,
-    TodoListDomainType
+    removeTodoListTC,
+    TodoListDomainType, updateTodoListTitleTC
 } from "../state/todolists-reducer";
 import {Task} from "./Task";
 import {SuperButton} from "./common/SuperButton/SuperButton";
@@ -24,11 +29,15 @@ export const Todolist: React.FC<PropsType> = React.memo(({todoList}) => {
     const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[todoList.id])
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(fetchTasksTC(todoList.id))
+    }, [])
+
     const removeTodolist = useCallback(() => {
-        dispatch(removeTodoListAC(todoList.id));
+        dispatch(removeTodoListTC(todoList.id));
     }, [dispatch])
     const changeTodolistTitle = useCallback((title: string) => {
-        dispatch(changeTodoListTitleAC(todoList.id, title));
+        dispatch(updateTodoListTitleTC(todoList.id, title));
     }, [dispatch])
 
     const onAllClickHandler = useCallback(() => dispatch(changeTodolistFilterAC(todoList.id, "all")), [dispatch, todoList.id]);
@@ -44,24 +53,25 @@ export const Todolist: React.FC<PropsType> = React.memo(({todoList}) => {
     }
 
     const removeTaskHandler = useCallback((taskID: string) => {
-        dispatch(removeTaskAC(taskID, todoList.id))
+        dispatch(removeTaskTC(taskID, todoList.id))
     }, [dispatch])
-    const changeTaskStatusHandler = useCallback((taskID: string, newIsDoneValue: TaskStatuses) => {
-        dispatch(changeTaskStatusAC(taskID, newIsDoneValue, todoList.id));
+    const changeTaskStatusHandler = useCallback((taskID: string, status: TaskStatuses, title: string) => {
+        // dispatch(_changeTaskStatusTC(todoList.id, taskID, status, title)); // by me
+        dispatch(changeTaskStatusTC(todoList.id, taskID, status));
     }, [dispatch])
     const changeTaskTitleHandler = useCallback((taskID: string, newValue: string) => {
-        dispatch(changeTaskTitleAC(taskID, newValue, todoList.id));
+        dispatch(updateTaskTitleTC(taskID, newValue, todoList.id));
     }, [dispatch])
     const addTaskHandler = useCallback((title: string) => {
-        dispatch(addTaskAC(title, todoList.id))
+        dispatch(addTaskTC(todoList.id, title))
     }, [dispatch])
 
-    return <div className={"toDoListMainBlock"}>
+    return <div className={"todoListBlock"}>
         <div className={"addItemFormToDoList"}>
             <EditableSpan value={todoList.title} onChange={changeTodolistTitle}/>
             <SuperButton onClick={removeTodolist} red>x</SuperButton>
         </div>
-        <AddItemForm addItem={addTaskHandler}/>
+        <AddItemForm placeholder={'...add new Task'} addItem={addTaskHandler}/>
         <div className={'taskBlock'}>
             {
                 tasksForTodoList.map(el => {

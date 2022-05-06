@@ -1,12 +1,13 @@
-import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {SuperButton} from "./common/SuperButton/SuperButton";
 import {SuperInputText} from "./common/SuperInput/SuperInputText";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    placeholder?: string
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem,}) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem, placeholder}) => {
     // console.log('AddItemForm')
 
     let [title, setTitle] = useState("")
@@ -34,6 +35,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem,
     }
     return <div className={"addItemForm"}>
         <SuperInputText value={title}
+                        placeholder={placeholder}
                         onChange={onChangeHandler}
                         onKeyPress={onKeyPressHandler}
                         error={error}>

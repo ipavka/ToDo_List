@@ -7,7 +7,7 @@ import {TaskStatuses, TaskType} from "../api/todolists-api";
 export type TaskPropsType = {
     task: TaskType
     removeTask: (taskID: string) => void
-    changeTaskStatus: (taskID: string, newIsDoneValue: TaskStatuses) => void
+    changeTaskStatus: (taskID: string, status: TaskStatuses, title: string) => void
     changeTaskTitle: (taskID: string, newValue: string) => void
 }
 
@@ -29,8 +29,8 @@ export const Task: React.FC<TaskPropsType> = React.memo((
 
     const onClickHandler = useCallback(() => removeTask(task.id), [removeTask, task.id])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        let newIsDoneValue = e.currentTarget.checked;
-        changeTaskStatus(task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New);
+        let status = e.currentTarget.checked;
+        changeTaskStatus(task.id, status ? TaskStatuses.Completed : TaskStatuses.New, task.title);
     }, [changeTaskStatus, task.id])
     const onTitleChangeHandler = useCallback((newValue: string) => {
         changeTaskTitle(task.id, newValue);
