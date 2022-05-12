@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import {Todolist} from './components/Todolist';
-import {AddItemForm} from './components/AddItemForm';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {addTodoListTC, fetchTodosTC, TodoListDomainType} from "./state/todolists-reducer";
 import {TaskType} from "./api/todolists-api";
+import {AddItemForm} from "./components/common/AddItemForm/AddItemForm";
+import {Todolist} from "./components/Todolist/Todolist";
 
 
 export type TasksStateType = {

@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {SuperButton} from "./common/SuperButton/SuperButton";
-import {SuperInputText} from "./common/SuperInput/SuperInputText";
+import {SuperInputText} from "../SuperInput/SuperInputText";
+import {SuperButton} from "../SuperButton/SuperButton";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void

@@ -1,23 +1,23 @@
 import React, {useCallback, useEffect} from 'react';
-import {AddItemForm} from './AddItemForm';
-import {EditableSpan} from './EditableSpan';
+import {AddItemForm} from '../common/AddItemForm/AddItemForm';
+import {EditableSpan} from '../common/EditableSpan/EditableSpan';
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
+import {AppRootStateType} from "../../state/store";
 import {
     addTaskTC,
     _changeTaskStatusTC,
     fetchTasksTC,
     removeTaskTC,
     updateTaskTitleTC, changeTaskStatusTC
-} from "../state/tasks-reducer";
+} from "../../state/tasks-reducer";
 import {
     changeTodolistFilterAC,
     removeTodoListTC,
     TodoListDomainType, updateTodoListTitleTC
-} from "../state/todolists-reducer";
-import {Task} from "./Task";
-import {SuperButton} from "./common/SuperButton/SuperButton";
-import {TaskStatuses, TaskType} from "../api/todolists-api";
+} from "../../state/todolists-reducer";
+import {Task} from "./Task/Task";
+import {SuperButton} from "../common/SuperButton/SuperButton";
+import {TaskStatuses, TaskType} from "../../api/todolists-api";
 
 
 type PropsType = {

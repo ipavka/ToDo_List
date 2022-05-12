@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {apiConfig} from "../configs/config";
 
-
 const instance = axios.create({
     withCredentials: true,
     baseURL: "https://social-network.samuraijs.com/api/1.1/",
@@ -9,13 +8,68 @@ const instance = axios.create({
         'API-KEY': apiConfig.NETWORK_KEY as string
     },
 })
-
 const placeholderInst = axios.create({
     withCredentials: true,
     baseURL: "https://jsonplaceholder.typicode.com/",
 
 })
 
+export const todoListAPI = {
+    getTodoLists() {
+        return instance.get<TodoListType[]>(`todo-lists`)
+            .then(res => res.data)
+    },
+    createTodoList(title: string) {
+        return instance.post<any, AxiosResponse<ResponseType<{ item: TodoListType }>>, { title: string }>(`todo-lists`,
+            {title: title})
+            .then(res => res.data)
+    },
+    deleteTodoList(todoID: string) {
+        return instance.delete<ResponseType>(`todo-lists/${todoID}`)
+            .then(res => res.data)
+    },
+    updateTodoListTitle(todoID: string, title: string) {
+        return instance.put<ResponseType>(`todo-lists/${todoID}`, {title: title})
+            .then(res => res.data)
+    },
+
+}
+export const taskAPI = {
+    getTasks(todoListId: string) {
+        return instance.get<GetTasksResponse>(`todo-lists/${todoListId}/tasks`)
+            .then(res => res.data)
+    },
+    createTask(todolistId: string, title: string) {
+        return instance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TaskType }>>>
+        (`todo-lists/${todolistId}/tasks`, {title})
+            .then(res => res.data)
+    },
+    updateTaskTitle(todoID: string, taskID: string, title: string) {
+        return instance.put<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`, {title: title})
+            .then(res => res.data)
+    },
+    _updateTaskStatus(todoID: string, taskID: string, status: TaskStatuses, title: string) {
+        return instance.put<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`, {title, status})
+            .then(res => res.data)
+    },
+    updateTaskStatus(todoID: string, taskID: string, model: UpdateTaskModelType) {
+        return instance.put<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`, model)
+            .then(res => res.data)
+    },
+    deleteTask(todolistId: string, taskId: string) {
+        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+            .then(res => res.data)
+    },
+
+}
+export const titleToDoListAPI = { // random title name
+    getTitle(value: number) {
+        return placeholderInst.get<PlaceHolderType[]>(`todos?_start=${value}&_limit=1`)
+            .then(res => res.data)
+    },
+}
+
+// types
 type PlaceHolderType = {
     userId: number
     id: number
@@ -71,63 +125,4 @@ type GetTasksResponse = {
     error: string | null
     totalCount: number
     items: TaskType[]
-}
-
-
-export const todoListAPI = {
-    getTodoLists() {
-        return instance.get<TodoListType[]>(`todo-lists`)
-            .then(res => res.data)
-    },
-    createTodoList(title: string) {
-        return instance.post<any, AxiosResponse<ResponseType<{ item: TodoListType }>>, { title: string }>(`todo-lists`,
-            {title: title})
-            .then(res => res.data)
-    },
-    deleteTodoList(todoID: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todoID}`)
-            .then(res => res.data)
-    },
-    updateTodoListTitle(todoID: string, title: string) {
-        return instance.put<ResponseType>(`todo-lists/${todoID}`, {title: title})
-            .then(res => res.data)
-    },
-
-}
-
-export const taskAPI = {
-    getTasks(todoListId: string) {
-        return instance.get<GetTasksResponse>(`todo-lists/${todoListId}/tasks`)
-            .then(res => res.data)
-    },
-    createTask(todolistId: string, title: string) {
-        return instance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TaskType }>>>
-        (`todo-lists/${todolistId}/tasks`, {title})
-            .then(res => res.data)
-    },
-    updateTaskTitle(todoID: string, taskID: string, title: string) {
-        return instance.put<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`, {title: title})
-            .then(res => res.data)
-    },
-    _updateTaskStatus(todoID: string, taskID: string, status: TaskStatuses, title: string) {
-        return instance.put<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`, {title, status})
-            .then(res => res.data)
-    },
-    updateTaskStatus(todoID: string, taskID: string, model: UpdateTaskModelType) {
-        return instance.put<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`, model)
-            .then(res => res.data)
-    },
-    deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
-            .then(res => res.data)
-    },
-
-}
-
-
-export const titleToDoListAPI = { // random title name
-    getTitle(value: number) {
-        return placeholderInst.get<PlaceHolderType[]>(`todos?_start=${value}&_limit=1`)
-            .then(res => res.data)
-    },
 }

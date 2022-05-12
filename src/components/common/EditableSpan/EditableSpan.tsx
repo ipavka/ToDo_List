@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {SuperInputText} from "./common/SuperInput/SuperInputText";
+import {SuperInputText} from "../SuperInput/SuperInputText";
 
 type EditableSpanPropsType = {
     value: string

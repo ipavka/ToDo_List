@@ -1,8 +1,9 @@
 import React, {ChangeEvent, useCallback, useState} from 'react';
-import {EditableSpan} from "./EditableSpan";
-import {SuperButton} from "./common/SuperButton/SuperButton";
-import SuperCheckbox from "./common/SuperCheckbox/SuperCheckbox";
-import {TaskStatuses, TaskType} from "../api/todolists-api";
+import {TaskStatuses, TaskType} from "../../../api/todolists-api";
+import SuperCheckbox from "../../common/SuperCheckbox/SuperCheckbox";
+import {EditableSpan} from "../../common/EditableSpan/EditableSpan";
+import {SuperButton} from "../../common/SuperButton/SuperButton";
+
 
 export type TaskPropsType = {
     task: TaskType
@@ -22,10 +23,6 @@ export const Task: React.FC<TaskPropsType> = React.memo((
     // console.log('Task')
 
     const [hidden, setHidden] = useState(true);
-
-// ToDo: настроить стили при изменении названия таски,
-//  если можно убрать чек-бокс когда ввожу новое значение,
-//  всплывающие подсказки на кнопке удаления и названии таски и туду листа.
 
     const onClickHandler = useCallback(() => removeTask(task.id), [removeTask, task.id])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
