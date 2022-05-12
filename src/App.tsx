@@ -6,6 +6,8 @@ import {addTodoListTC, fetchTodosTC, TodoListDomainType} from "./state/todolists
 import {TaskType} from "./api/todolists-api";
 import {AddItemForm} from "./components/common/AddItemForm/AddItemForm";
 import {Todolist} from "./components/Todolist/Todolist";
+import {ProgressBar} from "./utils/ProgressBar/ProgressBar";
+import {Snackbar} from "./utils/Snackbar/Snackbar";
 
 
 export type TasksStateType = {
@@ -25,23 +27,27 @@ export const App = () => {
         dispatch(addTodoListTC(title))
     }, [dispatch])
 
-    return (
-        <main className="mainBlock">
-            <div className="addInput">
-                <AddItemForm placeholder={'...add new ToDo List'} addItem={addTodolist}/>
-            </div>
-            <div className="todoListMainBlock">
-                {
-                    todoLists.map(el => {
-                        return (<Todolist
-                                key={el.id}
-                                todoList={el}/>
-                        )
-                    })
-                }
-            </div>
+    return (<>
+            <ProgressBar/>
+            <Snackbar/>
+            <main className="mainBlock">
+                <div className="addInput">
+                    <AddItemForm placeholder={'...add new ToDo List'} addItem={addTodolist}/>
+                </div>
+                <div className="todoListMainBlock">
+                    {
+                        todoLists.map(el => {
+                            return (<Todolist
+                                    key={el.id}
+                                    todoList={el}/>
+                            )
+                        })
+                    }
+                </div>
 
-        </main>
+            </main>
+        </>
+
     );
 }
 
