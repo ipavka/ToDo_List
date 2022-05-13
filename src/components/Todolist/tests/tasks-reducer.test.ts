@@ -1,4 +1,7 @@
-import {TasksStateType} from "../../App";
+import {addTodolistAC, removeTodoListAC, setTodosAC} from "../todolists-reducer";
+import {v1} from "uuid";
+import {TasksStateType} from "../../../app/App";
+import {TaskPriorities, TaskStatuses} from "../../../api/todolists-api";
 import {
     addTaskAC,
     changeTaskStatusAC,
@@ -6,10 +9,7 @@ import {
     fetchTasksAC,
     removeTaskAC,
     tasksReducer
-} from "../tasks-reducer";
-import {addTodolistAC, removeTodoListAC, setTodosAC} from "../todolists-reducer";
-import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
-import {v1} from "uuid";
+} from "../Task/tasks-reducer";
 
 let startState: TasksStateType = {};
 beforeEach(() => {
@@ -96,25 +96,25 @@ test('empty arrays should be added when we set todoLists', () => {
     expect(endState['2']).toStrictEqual([]);
 });
 test('tasks should be added for todoLists', () => {
-    const action = fetchTasksAC('todolistId-1', startState['todolistId-1'])
+    const action = fetchTasksAC('todoListId-1', startState['todoListId-1'])
 
     const endState = tasksReducer({
-        "todolistId-1": [],
-        "todolistId-2": [],
+        "todoListId-1": [],
+        "todoListId-2": [],
     }, action);
 
-    expect(endState['todolistId-1'].length).toBe(3);
-    expect(endState['todolistId-2'].length).not.toBe(1);
+    expect(endState['todoListId-1'].length).toBe(3);
+    expect(endState['todoListId-2'].length).not.toBe(1);
 
 });
 test('correct task should be deleted from correct array', () => {
-    const action = removeTaskAC("2", "todolistId-2");
+    const action = removeTaskAC("2", "todoListId-2");
 
     const endState = tasksReducer(startState, action)
 
-    expect(endState["todolistId-1"].length).toBe(3);
-    expect(endState["todolistId-2"].length).toBe(2);
-    expect(endState["todolistId-2"].every(t => t.id != "2")).toBeTruthy();
+    expect(endState["todoListId-1"].length).toBe(3);
+    expect(endState["todoListId-2"].length).toBe(2);
+    expect(endState["todoListId-2"].every(el => el.id !== "2")).toBeTruthy();
 });
 test('correct task should be added to correct array', () => {
     const action = addTaskAC(startState['todoListId-2'][1]);

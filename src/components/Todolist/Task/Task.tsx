@@ -3,11 +3,13 @@ import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import SuperCheckbox from "../../common/SuperCheckbox/SuperCheckbox";
 import {EditableSpan} from "../../common/EditableSpan/EditableSpan";
 import {SuperButton} from "../../common/SuperButton/SuperButton";
+import {RequestStatusType} from "../../../app/app-reducer";
 
 
 export type TaskPropsType = {
     task: TaskType
     removeTask: (taskID: string) => void
+    entityStatus: RequestStatusType
     changeTaskStatus: (taskID: string, status: TaskStatuses, title: string) => void
     changeTaskTitle: (taskID: string, newValue: string) => void
 }
@@ -18,9 +20,10 @@ export const Task: React.FC<TaskPropsType> = React.memo((
         removeTask,
         changeTaskStatus,
         changeTaskTitle,
+        entityStatus,
     }
 ) => {
-    // console.log('Task')
+
 
     const [hidden, setHidden] = useState(true);
 
@@ -42,7 +45,7 @@ export const Task: React.FC<TaskPropsType> = React.memo((
                               hidden={setHidden}
                 />
             </div>
-            {hidden && <SuperButton onClick={onClickHandler} red>del</SuperButton>}
+            {hidden && <SuperButton onClick={onClickHandler}  disabled={entityStatus === 'loading'} red>del</SuperButton>}
         </div>
     );
 });

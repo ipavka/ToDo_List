@@ -1,13 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store";
-import {addTodoListTC, fetchTodosTC, TodoListDomainType} from "./state/todolists-reducer";
-import {TaskType} from "./api/todolists-api";
-import {AddItemForm} from "./components/common/AddItemForm/AddItemForm";
-import {Todolist} from "./components/Todolist/Todolist";
-import {ProgressBar} from "./utils/ProgressBar/ProgressBar";
-import {Snackbar} from "./utils/Snackbar/Snackbar";
+import {useDispatch} from "react-redux";
+import {TaskType} from "../api/todolists-api";
+import {AddItemForm} from "../components/common/AddItemForm/AddItemForm";
+import {Todolist} from "../components/Todolist/Todolist";
+import {ProgressBar} from "../components/common/ProgressBar/ProgressBar";
+import {Snackbar} from "../components/common/Snackbar/Snackbar";
+import {addTodoListTC, fetchTodosTC, TodoListDomainType} from "../components/Todolist/todolists-reducer";
+import {useAppSelector} from "./store";
+import {RequestStatusType} from "./app-reducer";
 
 
 export type TasksStateType = {
@@ -20,15 +21,17 @@ export const App = () => {
         dispatch(fetchTodosTC())
     }, [])
 
-    const todoLists = useSelector<AppRootStateType, TodoListDomainType[]>(state => state.todoLists)
+    const todoLists = useAppSelector<TodoListDomainType[]>(state => state.todoLists);
+    const status = useAppSelector<RequestStatusType>(state => state.app.status);
+    const  error = useAppSelector<string | null>(state => state.app.error);
     const dispatch = useDispatch();
-
+// debugger
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodoListTC(title))
     }, [dispatch])
 
     return (<>
-            <ProgressBar/>
+            {status === 'loading' && <ProgressBar/>}
             <Snackbar/>
             <main className="mainBlock">
                 <div className="addInput">

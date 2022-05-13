@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {apiConfig} from "../configs/config";
+import {apiConfig} from "../utils/config";
 
 const instance = axios.create({
     withCredentials: true,

@@ -1,23 +1,13 @@
 import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from '../common/AddItemForm/AddItemForm';
 import {EditableSpan} from '../common/EditableSpan/EditableSpan';
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../state/store";
-import {
-    addTaskTC,
-    _changeTaskStatusTC,
-    fetchTasksTC,
-    removeTaskTC,
-    updateTaskTitleTC, changeTaskStatusTC
-} from "../../state/tasks-reducer";
-import {
-    changeTodolistFilterAC,
-    removeTodoListTC,
-    TodoListDomainType, updateTodoListTitleTC
-} from "../../state/todolists-reducer";
+import {useDispatch} from "react-redux";
 import {Task} from "./Task/Task";
 import {SuperButton} from "../common/SuperButton/SuperButton";
 import {TaskStatuses, TaskType} from "../../api/todolists-api";
+import {changeTodolistFilterAC, removeTodoListTC, TodoListDomainType, updateTodoListTitleTC} from "./todolists-reducer";
+import {useAppSelector} from "../../app/store";
+import {addTaskTC, changeTaskStatusTC, fetchTasksTC, removeTaskTC, updateTaskTitleTC} from "./Task/tasks-reducer";
 
 
 type PropsType = {
@@ -26,7 +16,7 @@ type PropsType = {
 
 export const Todolist: React.FC<PropsType> = React.memo(({todoList}) => {
 
-    const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[todoList.id])
+    const tasks = useAppSelector<TaskType[]>(state => state.tasks[todoList.id])
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -69,15 +59,17 @@ export const Todolist: React.FC<PropsType> = React.memo(({todoList}) => {
     return <div className={"todoListBlock"}>
         <div className={"addItemFormToDoList"}>
             <EditableSpan value={todoList.title} onChange={changeTodolistTitle}/>
-            <SuperButton onClick={removeTodolist} red>x</SuperButton>
+            <SuperButton onClick={removeTodolist} disabled={todoList.entityStatus === 'loading'} red>x</SuperButton>
         </div>
-        <AddItemForm placeholder={'...add new Task'} addItem={addTaskHandler}/>
+        <AddItemForm placeholder={'...add new Task'} addItem={addTaskHandler}
+                     disabled={todoList.entityStatus === 'loading'}/>
         <div className={'taskBlock'}>
             {
                 tasksForTodoList.map(el => {
                     return <Task
                         key={el.id}
                         task={el}
+                        entityStatus={todoList.entityStatus}
                         removeTask={removeTaskHandler}
                         changeTaskStatus={changeTaskStatusHandler}
                         changeTaskTitle={changeTaskTitleHandler}/>

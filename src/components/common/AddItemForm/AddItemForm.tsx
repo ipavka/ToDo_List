@@ -5,13 +5,14 @@ import {SuperButton} from "../SuperButton/SuperButton";
 type AddItemFormPropsType = {
     addItem: (title: string) => void
     placeholder?: string
+    disabled?: boolean
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem, placeholder}) => {
-    // console.log('AddItemForm')
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((
+    {addItem, placeholder, disabled}) => {
 
-    let [title, setTitle] = useState("")
-    let [error, setError] = useState<string | null>(null)
+    const [title, setTitle] = useState("")
+    const [error, setError] = useState<string | null>(null)
 
     const addItemHandler = () => {
         if (title.trim() !== "") {
@@ -38,10 +39,14 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem,
                         placeholder={placeholder}
                         onChange={onChangeHandler}
                         onKeyPress={onKeyPressHandler}
-                        error={error}>
+                        error={error}
+                        disabled={disabled}
+        >
 
         </SuperInputText>
         {/* ToDo: Возможно ли убрать перерисовку кнопки в момент набора текста в инпуте? */}
-        <SuperButton onMouseOver={mouseOverHandler} onClick={addItemHandler}>add</SuperButton>
+        <SuperButton onMouseOver={mouseOverHandler}
+                     disabled={disabled}
+                     onClick={addItemHandler}>add</SuperButton>
     </div>
 })

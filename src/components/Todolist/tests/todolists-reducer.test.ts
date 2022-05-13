@@ -16,11 +16,11 @@ beforeEach(() => {
     startState = [
         {
             id: todoListId1, title: "What to learn", filter: "all", addedDate: '',
-            order: 0,
+            order: 0, entityStatus: 'idle'
         },
         {
             id: todoListId2, title: "What to buy", filter: "all", addedDate: '',
-            order: 0,
+            order: 0, entityStatus: 'idle'
         }
     ]
 
@@ -41,11 +41,11 @@ test('correct todolist should be removed', () => {
     const startState: TodoListDomainType[] = [
         {
             id: todoListId1, title: "What to learn", filter: "all", addedDate: '',
-            order: 0,
+            order: 0, entityStatus: 'idle'
         },
         {
             id: todoListId2, title: "What to buy", filter: "all", addedDate: '',
-            order: 0,
+            order: 0, entityStatus: 'idle'
         }
     ]
 
@@ -64,11 +64,11 @@ test('correct todolist should be added', () => {
     const startState: TodoListDomainType[] = [
         {
             id: todolistId1, title: "What to learn", filter: "all", addedDate: '',
-            order: 0,
+            order: 0, entityStatus: 'idle'
         },
         {
             id: todolistId2, title: "What to buy", filter: "all", addedDate: '',
-            order: 0,
+            order: 0, entityStatus: 'idle'
         }
     ]
 
@@ -85,8 +85,8 @@ test('correct todolist should change its name', () => {
     let newTodolistTitle = "New Todolist";
 
     const startState: TodoListDomainType[] = [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0, entityStatus: 'idle'}
     ]
 
     const endState = todoListsReducer(
@@ -103,8 +103,8 @@ test('correct filter of todolist should be changed', () => {
     let newFilter: FilterValuesType = "completed";
 
     const startState: TodoListDomainType[] = [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0,},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0,}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0, entityStatus: 'idle'}
     ]
 
     const endState = todoListsReducer(startState, changeTodolistFilterAC(todolistId2, newFilter));
