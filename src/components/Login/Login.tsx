@@ -12,6 +12,20 @@ type LoginFormType = {
 export const Login = () => {
 
     const formik = useFormik({
+        validate: (values) => {
+            const errors = {} as LoginFormType;
+            if (!values.email) {
+                errors.email = 'Email is required';
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address';
+            }
+            if (!values.password) {
+                errors.password = 'password is required';
+            } else if (!/^(?=.*\d)(?=.*[a-z]).{8,}$/i.test(values.password)) {
+                errors.password = 'must contain 8 characters and one digit or letter';
+            }
+            return errors;
+        },
         initialValues: {
             email: '',
             password: '',
@@ -24,19 +38,27 @@ export const Login = () => {
     return (
         <div className={s.mainBlock}>
             <h1>Login Form</h1>
-            <form  className={s.loginForm} onSubmit={formik.handleSubmit}>
-                <input
-                    className={s.superInput}
-                    // type="email"
-                    placeholder="Email"
-                    {...formik.getFieldProps("email")}
-                />
-                <input
-                    className={s.superInput}
-                    type="password"
-                    placeholder="Password"
-                    {...formik.getFieldProps("password")}
-                />
+            <form className={s.loginForm} onSubmit={formik.handleSubmit}>
+                <div className={s.blockInfoError}>
+                    <input
+                        className={s.superInput}
+                        placeholder="Email"
+                        {...formik.getFieldProps("email")}
+                    />
+                    {formik.touched.email && formik.errors.email ?
+                        <div className={s.errorMessage}>{formik.errors.email}</div> : null}
+                </div>
+                <div className={s.blockInfoError}>
+                    <input
+                        className={s.superInput}
+                        type="password"
+                        placeholder="Password"
+                        {...formik.getFieldProps("password")}
+                    />
+                    {formik.touched.password && formik.errors.password ?
+                        <div className={s.errorMessage}>{formik.errors.password}</div> : null}
+                </div>
+
                 <SuperCheckbox  {...formik.getFieldProps("rememberMe")}
                                 checked={formik.values.rememberMe}>
                     remember me

@@ -7,6 +7,7 @@
     margin: 50px auto;
     border: 1px solid #dad0e1;
     border-radius: 15px;
+    box-shadow: 0 1px 15px 0 rgb(51 51 51 / 20%);
 }
 .loginForm {
     width: 100%;
@@ -72,6 +73,11 @@
     background: #3d65ef;
 }
 
+.blockInfoError {
+    height: 70px;
+}
 .errorMessage {
     color: #ce0f0f;
+    font-weight: bold;
+    text-align: center;
 }
