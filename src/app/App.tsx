@@ -9,6 +9,9 @@ import {Snackbar} from "../components/common/Snackbar/Snackbar";
 import {addTodoListTC, fetchTodosTC, TodoListDomainType} from "../components/Todolist/todolists-reducer";
 import {useAppSelector} from "./store";
 import {RequestStatusType} from "./app-reducer";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {Login} from "../components/Login/Login";
+import {Error404} from "../components/common/Error404/Error404";
 
 
 export type TasksStateType = {
@@ -23,7 +26,7 @@ export const App = () => {
 
     const todoLists = useAppSelector<TodoListDomainType[]>(state => state.todoLists);
     const status = useAppSelector<RequestStatusType>(state => state.app.status);
-    const  error = useAppSelector<string | null>(state => state.app.error);
+    // const error = useAppSelector<string | null>(state => state.app.error);
     const dispatch = useDispatch();
 // debugger
     const addTodolist = useCallback((title: string) => {
@@ -33,24 +36,28 @@ export const App = () => {
     return (<>
             {status === 'loading' && <ProgressBar/>}
             <Snackbar/>
-            <main className="mainBlock">
-                <div className="addInput">
-                    <AddItemForm placeholder={'...add new ToDo List'} addItem={addTodolist}/>
-                </div>
-                <div className="todoListMainBlock">
-                    {
-                        todoLists.map(el => {
-                            return (<Todolist
-                                    key={el.id}
-                                    todoList={el}/>
-                            )
-                        })
-                    }
-                </div>
-
-            </main>
+            <Routes>
+                <Route path="/"
+                       element={<main className="mainBlock">
+                           <div className="addInput">
+                               <AddItemForm placeholder={'...add new ToDo List'} addItem={addTodolist}/>
+                           </div>
+                           <div className="todoListMainBlock">
+                               {
+                                   todoLists.map(el => {
+                                       return (<Todolist
+                                               key={el.id}
+                                               todoList={el}/>
+                                       )
+                                   })
+                               }
+                           </div>
+                       </main>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/404" element={<Error404/>}/>
+                <Route path="*" element={<Navigate to={"/404"}/>}/>
+            </Routes>
         </>
-
     );
 }
 

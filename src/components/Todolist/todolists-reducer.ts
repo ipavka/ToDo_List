@@ -7,7 +7,11 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/error-
 
 export const todoListId1 = v1();
 export const todoListId2 = v1();
-
+export enum ResultCodeStatuses {
+    success = 0,
+    error = 1,
+    captcha = 10,
+}
 const initialState: TodoListDomainType[] = []
 
 export const todoListsReducer = (
@@ -137,9 +141,4 @@ export type FilterValuesType = "all" | "active" | "completed";
 export type TodoListDomainType = TodoListType & {
     filter: FilterValuesType
     entityStatus: RequestStatusType
-}
-export enum ResultCodeStatuses {
-    success = 0,
-    error = 1,
-    captcha = 10,
 }

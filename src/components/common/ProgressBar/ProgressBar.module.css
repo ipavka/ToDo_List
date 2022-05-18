@@ -1,25 +1,17 @@
 .mainBlock {
     margin: 0;
     padding: 0;
-    /*animation: pulse 5s infinite;*/
 }
 
 .container {
     position: relative;
-    /*width: 50%;*/
-    /*margin: 280px auto;*/
-    /*padding: 20px 40px;*/
-    /*border-radius: 4px;*/
     box-sizing: border-box;
     background: #fff;
-    /*box-shadow: 0 10px 20px rgba(0, 0, 0, .5);*/
 }
 
 .loading {
-    /*position: relative;*/
     top: 0;
     position: fixed;
-    /*display: inline-block;*/
     width: 100%;
     height: 5px;
     background: #f1f1f1;
@@ -65,25 +57,3 @@
         background: #494d5f;
     }
 }
-
-/*@keyframes pulse {*/
-/*    0% {*/
-/*        background: #a28089;*/
-/*    }*/
-
-/*    25% {*/
-/*        background: #a0d2eb;*/
-/*    }*/
-
-/*    50% {*/
-/*        background: #ffa8b6;*/
-/*    }*/
-
-/*    75% {*/
-/*        background: #d0bdf4;*/
-/*    }*/
-
-/*    100% {*/
-/*        background: #494d5f;*/
-/*    }*/
-/*}*/
