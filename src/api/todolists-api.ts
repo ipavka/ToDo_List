@@ -29,7 +29,7 @@ export const todoListAPI = {
             .then(res => res.data)
     },
     updateTodoListTitle(todoID: string, title: string) {
-        return instance.put<ResponseType>(`todo-lists/${todoID}`, {title: title})
+        return instance.put<any, AxiosResponse<ResponseType>, { title: string }>(`todo-lists/${todoID}`, {title: title})
             .then(res => res.data)
     },
 
@@ -40,7 +40,7 @@ export const taskAPI = {
             .then(res => res.data)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TaskType }>>>
+        return instance.post<any, AxiosResponse<ResponseType<{ item: TaskType }>>, { title: string }>
         (`todo-lists/${todolistId}/tasks`, {title})
             .then(res => res.data)
     },
@@ -62,6 +62,20 @@ export const taskAPI = {
     },
 
 }
+
+export const authAPI = {
+    login(data: LoginParamsType) {
+        return instance.post<LoginParamsType, AxiosResponse<ResponseType<{ userId: number }>>>
+        (`/auth/login`, data)
+            .then(res => res.data);
+    },
+    authMe() {
+        return instance.get<ResponseType<MeResponseType>>('auth/me')
+            .then(res => res.data);
+    }
+}
+
+
 export const titleToDoListAPI = { // random title name
     getTitle(value: number) {
         return placeholderInst.get<PlaceHolderType[]>(`todos?_start=${value}&_limit=1`)
@@ -75,6 +89,11 @@ type PlaceHolderType = {
     id: number
     title: string
     completed: boolean
+}
+type MeResponseType = {
+    id: number
+    email: string
+    login: string
 }
 export enum TaskStatuses {
     New = 0,
@@ -115,6 +134,13 @@ export type TodoListType = {
     order: number
     title: string
 }
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: string
+}
+
 export type ResponseType<D = {}> = {
     resultCode: number
     messages: string[]

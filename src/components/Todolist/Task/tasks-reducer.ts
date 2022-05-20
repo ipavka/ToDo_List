@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {TasksStateType} from "../../../app/App";
 import {taskAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../../../api/todolists-api";
-import {RootActionsType, AppRootStateType} from "../../../app/store";
+import {RootActionsType, AppRootStateType, AppThunk} from "../../../app/store";
 import {
     AddTodolistActionType,
     changeTodolistEntityStatusAC,
@@ -87,18 +87,20 @@ export const fetchTasksAC = (todoID: string, tasks: TaskType[]) => {
 }
 
 // Thunk
-export const fetchTasksTC = (todoID: string) => {
-    return (dispatch: Dispatch<RootActionsType>) => {
+export const fetchTasksTC = (todoID: string): AppThunk => {
+    return (dispatch) => {
         dispatch(setAppStatusAC('loading'));
         taskAPI.getTasks(todoID)
             .then(res => {
                 dispatch(fetchTasksAC(todoID, res.items))
                 dispatch(setAppStatusAC('succeeded'));
-            })
+            }).catch((rej: AxiosError) => {
+            handleServerNetworkError(rej.message, dispatch);
+        })
     }
 }
-export const addTaskTC = (todoID: string, title: string) => {
-    return (dispatch: Dispatch<RootActionsType>) => {
+export const addTaskTC = (todoID: string, title: string): AppThunk => {
+    return (dispatch) => {
         dispatch(setAppStatusAC('loading'));
         taskAPI.createTask(todoID, title)
             .then(res => {

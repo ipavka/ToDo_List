@@ -1,17 +1,18 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {TaskType} from "../api/todolists-api";
 import {AddItemForm} from "../components/common/AddItemForm/AddItemForm";
-import {Todolist} from "../components/Todolist/Todolist";
 import {ProgressBar} from "../components/common/ProgressBar/ProgressBar";
 import {Snackbar} from "../components/common/Snackbar/Snackbar";
-import {addTodoListTC, fetchTodosTC, TodoListDomainType} from "../components/Todolist/todolists-reducer";
-import {useAppSelector} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {addTodoListTC} from "../components/Todolist/todolists-reducer";
+import {AppRootStateType, useAppSelector} from "./store";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../components/Login/Login";
 import {Error404} from "../components/common/Error404/Error404";
+import {Spinner} from "../components/common/Spinner/Spinner";
+import {TodoListsWrapper} from "../components/Todolist/TodoListsWrapper";
 
 
 export type TasksStateType = {
@@ -20,18 +21,22 @@ export type TasksStateType = {
 
 export const App = () => {
 
+    const dispatch = useDispatch();
+
+    const status = useAppSelector<RequestStatusType>(state => state.app.status);
+    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized);
+
     useEffect(() => {
-        dispatch(fetchTodosTC())
+        dispatch(initializeAppTC())
     }, [])
 
-    const todoLists = useAppSelector<TodoListDomainType[]>(state => state.todoLists);
-    const status = useAppSelector<RequestStatusType>(state => state.app.status);
-    // const error = useAppSelector<string | null>(state => state.app.error);
-    const dispatch = useDispatch();
-// debugger
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodoListTC(title))
     }, [dispatch])
+
+    if (!isInitialized) {
+        return <Spinner/>
+    }
 
     return (<>
             {status === 'loading' && <ProgressBar/>}
@@ -43,14 +48,7 @@ export const App = () => {
                                <AddItemForm placeholder={'...add new ToDo List'} addItem={addTodolist}/>
                            </div>
                            <div className="todoListMainBlock">
-                               {
-                                   todoLists.map(el => {
-                                       return (<Todolist
-                                               key={el.id}
-                                               todoList={el}/>
-                                       )
-                                   })
-                               }
+                               <TodoListsWrapper/>
                            </div>
                        </main>}/>
                 <Route path="/login" element={<Login/>}/>

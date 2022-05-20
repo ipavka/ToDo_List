@@ -62,26 +62,18 @@ export const changeTodolistEntityStatusAC = (status: RequestStatusType, todoList
 }
 
 // Thunk
-export const fetchTodosTC = (): AppThunk => async dispatch => {
-    try {
+export const fetchTodosTC = (): AppThunk => {
+    return (dispatch) => {
         dispatch(setAppStatusAC('loading'));
-        const response = await todoListAPI.getTodoLists();
-        dispatch(setTodosAC(response));
-        dispatch(setAppStatusAC('idle'));
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-        }
+        todoListAPI.getTodoLists()
+            .then(res => {
+                dispatch(setTodosAC(res));
+                dispatch(setAppStatusAC('succeeded'));
+            }).catch((rej: AxiosError) => {
+            handleServerNetworkError(rej.message, dispatch);
+        })
     }
 }
-// export const fetchTodosTC = () => (dispatch: Dispatch<RootActionsType>) => {
-//     dispatch(setAppStatusAC('loading'));
-//     todoListAPI.getTodoLists()
-//         .then(res => {
-//             dispatch(setAppStatusAC('idle'));
-//             dispatch(setTodosAC(res))
-//         })
-// }
 export const addTodoListTC = (title: string): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC('loading'));
     todoListAPI.createTodoList(title)

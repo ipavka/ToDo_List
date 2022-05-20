@@ -16,8 +16,8 @@ type PropsType = {
 
 export const Todolist: React.FC<PropsType> = React.memo(({todoList}) => {
 
-    const tasks = useAppSelector<TaskType[]>(state => state.tasks[todoList.id])
     const dispatch = useDispatch();
+    const tasks = useAppSelector<TaskType[]>(state => state.tasks[todoList.id]);
 
     useEffect(() => {
         dispatch(fetchTasksTC(todoList.id))

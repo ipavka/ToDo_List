@@ -1,39 +1,51 @@
-import {todoListAPI, TodoListType} from "../../api/todolists-api";
 import {AppThunk} from "../../app/store";
-import {RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
-import {AxiosError} from "axios";
+import {authAPI, LoginParamsType} from "../../api/todolists-api";
+import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {AxiosError} from "axios";
+import {ResultCodeStatuses} from "../Todolist/todolists-reducer";
 
 
-const initialState = {}
+const initialState = {
+    isLoggedIn: false
+}
+type InitialStateType = typeof initialState
 
 export const loginReducer = (
-    state: any = initialState, action: any): any => {
+    state: InitialStateType = initialState, action: LoginActionsType): InitialStateType => {
     switch (action.type) {
+        case "login/SET-IS-LOGGED-IN": {
+            return {...state, isLoggedIn: action.value}
+        }
         default:
             return state;
     }
 }
 
 // actions
-// export const removeTodoListAC = (todolistID: string) => {
-//     return {type: 'REMOVE-TODOLIST', todolistID,} as const;
-// }
-
+export const setIsLoggedInAC = (value: boolean) => {
+    return {type: 'login/SET-IS-LOGGED-IN', value,} as const;
+}
 
 // Thunk
-export const authLogInTC = (): AppThunk => async dispatch => {
-    try {
-
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log(error.message);
-        }
+export const authLogInTC = (data: LoginParamsType): AppThunk => {
+    return (dispatch) => {
+        dispatch(setAppStatusAC('loading'));
+        authAPI.login(data)
+            .then(res => {
+                if (res.resultCode === ResultCodeStatuses.success) {
+                    dispatch(setIsLoggedInAC(true));
+                    dispatch(setAppStatusAC('succeeded'));
+                } else {
+                    handleServerAppError(res, dispatch);
+                }
+            }).catch((rej: AxiosError) => {
+            handleServerNetworkError(rej.message, dispatch);
+        })
     }
 }
 
-
 // types
-export type LoginActionsType = any
+export type LoginActionsType = ReturnType<typeof setIsLoggedInAC>
 
 
