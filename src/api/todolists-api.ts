@@ -72,9 +72,12 @@ export const authAPI = {
     authMe() {
         return instance.get<ResponseType<MeResponseType>>('auth/me')
             .then(res => res.data);
+    },
+    logout: function () {
+        return instance.delete<ResponseType>('auth/login')
+            .then(res => res.data);
     }
 }
-
 
 export const titleToDoListAPI = { // random title name
     getTitle(value: number) {
@@ -140,7 +143,6 @@ export type LoginParamsType = {
     rememberMe?: boolean
     captcha?: string
 }
-
 export type ResponseType<D = {}> = {
     resultCode: number
     messages: string[]

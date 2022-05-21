@@ -24,7 +24,6 @@ export const Task: React.FC<TaskPropsType> = React.memo((
     }
 ) => {
 
-
     const [hidden, setHidden] = useState(true);
 
     const onClickHandler = useCallback(() => removeTask(task.id), [removeTask, task.id])
@@ -38,8 +37,8 @@ export const Task: React.FC<TaskPropsType> = React.memo((
 
     return (
         <div key={task.id} className={"taskItem"}>
-            <div className={task.status === 2 ? "checkBoxItem is-done" : "checkBoxItem"}>
-                {hidden && <SuperCheckbox onChange={onChangeHandler} checked={task.status === 2}/>}
+            <div className={task.status === TaskStatuses.Completed ? "checkBoxItem is-done" : "checkBoxItem"}>
+                {hidden && <SuperCheckbox onChange={onChangeHandler} checked={task.status === TaskStatuses.Completed}/>}
                 <EditableSpan value={task.title}
                               onChange={onTitleChangeHandler}
                               hidden={setHidden}

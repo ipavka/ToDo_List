@@ -7,11 +7,13 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/error-
 
 export const todoListId1 = v1();
 export const todoListId2 = v1();
+
 export enum ResultCodeStatuses {
     success = 0,
     error = 1,
     captcha = 10,
 }
+
 const initialState: TodoListDomainType[] = []
 
 export const todoListsReducer = (
@@ -35,6 +37,9 @@ export const todoListsReducer = (
         case "CHANGE-TODOLIST-ENTITY-STATUS": {
             // return [...state, {...action.status}]
             return state.map(el => el.id === action.todoListID ? {...el, entityStatus: action.status} : el)
+        }
+        case "CLEAR-DATA": {
+            return []
         }
         default:
             return state;
@@ -60,6 +65,8 @@ export const setTodosAC = (todos: TodoListType[]) => {
 export const changeTodolistEntityStatusAC = (status: RequestStatusType, todoListID: string) => {
     return {type: 'CHANGE-TODOLIST-ENTITY-STATUS', status, todoListID} as const
 }
+export const clearTodosDataAC = () => ({type: 'CLEAR-DATA'} as const)
+
 
 // Thunk
 export const fetchTodosTC = (): AppThunk => {
@@ -123,12 +130,14 @@ export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export type RemoveTodolistActionType = ReturnType<typeof removeTodoListAC>
 export type SetTodosActionType = ReturnType<typeof setTodosAC>
 export type ChangeTodolistEntityType = ReturnType<typeof changeTodolistEntityStatusAC>
+export type ClearDataActionType = ReturnType<typeof clearTodosDataAC>
 export type TodoListActionsType = RemoveTodolistActionType
     | AddTodolistActionType
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodolistFilterAC>
     | SetTodosActionType
     | ChangeTodolistEntityType
+    | ClearDataActionType
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodoListDomainType = TodoListType & {
     filter: FilterValuesType

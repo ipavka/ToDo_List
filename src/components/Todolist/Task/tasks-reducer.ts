@@ -4,7 +4,7 @@ import {taskAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../../../api
 import {RootActionsType, AppRootStateType, AppThunk} from "../../../app/store";
 import {
     AddTodolistActionType,
-    changeTodolistEntityStatusAC,
+    changeTodolistEntityStatusAC, ClearDataActionType,
     RemoveTodolistActionType, ResultCodeStatuses,
     SetTodosActionType
 } from "../todolists-reducer";
@@ -61,6 +61,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: TaskA
             delete copyState[action.todolistID];
             return copyState;
         }
+        case "CLEAR-DATA": {
+            return {}
+        }
         default:
             return state;
     }
@@ -104,7 +107,7 @@ export const addTaskTC = (todoID: string, title: string): AppThunk => {
         dispatch(setAppStatusAC('loading'));
         taskAPI.createTask(todoID, title)
             .then(res => {
-                if(res.resultCode === ResultCodeStatuses.success) {
+                if (res.resultCode === ResultCodeStatuses.success) {
                     dispatch(addTaskAC(res.data.item))
                     dispatch(setAppStatusAC('succeeded'));
                 } else {
@@ -134,7 +137,7 @@ export const updateTaskTitleTC = (taskID: string, title: string, todoID: string)
         dispatch(setAppStatusAC('loading'));
         taskAPI.updateTaskTitle(todoID, taskID, title)
             .then(res => {
-                if(res.resultCode === ResultCodeStatuses.success) {
+                if (res.resultCode === ResultCodeStatuses.success) {
                     dispatch(changeTaskTitleAC(taskID, title, todoID))
                     dispatch(setAppStatusAC('succeeded'));
                 } else {
@@ -192,3 +195,4 @@ export type TaskActionsType = ReturnType<typeof removeTaskAC>
     | AddTodolistActionType
     | RemoveTodolistActionType
     | SetTodosActionType
+    | ClearDataActionType

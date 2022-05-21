@@ -3,7 +3,7 @@ import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AxiosError} from "axios";
-import {ResultCodeStatuses} from "../Todolist/todolists-reducer";
+import {clearTodosDataAC, ResultCodeStatuses} from "../Todolist/todolists-reducer";
 
 
 const initialState = {
@@ -42,6 +42,25 @@ export const authLogInTC = (data: LoginParamsType): AppThunk => {
             }).catch((rej: AxiosError) => {
             handleServerNetworkError(rej.message, dispatch);
         })
+    }
+}
+
+export const logoutTC  = (): AppThunk => {
+    return (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        authAPI.logout()
+            .then(res => {
+                if (res.resultCode === ResultCodeStatuses.success) {
+                    dispatch(setIsLoggedInAC(false));
+                    dispatch(setAppStatusAC('succeeded'));
+                    dispatch(clearTodosDataAC());
+                } else {
+                    handleServerAppError(res, dispatch)
+                }
+            })
+            .catch((rej: AxiosError) => {
+                handleServerNetworkError(rej.message, dispatch)
+            })
     }
 }
 
