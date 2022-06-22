@@ -1,8 +1,8 @@
-import {AppThunk} from "./store";
 import {authAPI} from "../api/todolists-api";
 import {ResultCodeStatuses} from "../components/Todolist/todolists-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {setIsLoggedInAC} from "../components/Login/login-reducer";
+import {Dispatch} from "redux";
 
 const initialState = {
     status: 'idle' as RequestStatusType,
@@ -35,11 +35,11 @@ export const setAppInitializedAC = (isInitialized: boolean) => {
 }
 
 // Thunk
-export const initializeAppTC = (): AppThunk => dispatch => {
+export const initializeAppTC = () => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'));
     authAPI.authMe().then(res => {
         if (res.resultCode === ResultCodeStatuses.success) {
-            dispatch(setIsLoggedInAC(true));
+            dispatch(setIsLoggedInAC({value: true}));
             dispatch(setAppStatusAC('succeeded'));
         } else {
             handleServerAppError(res, dispatch);
