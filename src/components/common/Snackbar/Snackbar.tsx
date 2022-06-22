@@ -11,7 +11,7 @@ export const Snackbar = () => {
 
 
     const closingHandler = () => {
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppErrorAC({error: null}))
     }
 
     return (<>
